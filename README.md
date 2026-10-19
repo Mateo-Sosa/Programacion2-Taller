@@ -16,7 +16,7 @@ Sistema centralizado en Java para gestionar la red regional de estaciones meteor
 
 ## Integrantes
 
-|Benítez, Martina||Chavez, Alejo ||Molina, Franco|| Sosa, Mateo |
+| Benítez, Martina || Chavez, Alejo || Molina, Franco || Sosa, Mateo |
 
 ## Requisitos
 
