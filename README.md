@@ -1,10 +1,10 @@
 # 🌧️ Sistema de Gestión de Estaciones Meteorológicas
 
-Proyecto desarrollado para la materia **Programación Orientada a Objetos** — Taller 2026.[cite: 1, 5]
+Proyecto desarrollado para la materia **Programación Orientada a Objetos** — Taller 2026.
 
 ## Descripción
 
-Sistema centralizado en Java para gestionar la red regional de estaciones meteorológicas, en el marco del impacto climático del fenómeno de El Niño.[cite: 2] Permite registrar lecturas de precipitación, evaluar umbrales críticos de riesgo por zona y activar un protocolo de alertas tempranas ante inundaciones y eventos severos.[cite: 2]
+Sistema centralizado en Java para gestionar la red regional de estaciones meteorológicas, en el marco del impacto climático del fenómeno de El Niño. Permite registrar lecturas de precipitación, evaluar umbrales críticos de riesgo por zona y activar un protocolo de alertas tempranas ante inundaciones y eventos severos.
 
 ## Funcionalidades
 
