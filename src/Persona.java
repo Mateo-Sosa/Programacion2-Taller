@@ -1,5 +1,3 @@
-package taller;
-
 public abstract class Persona extends ResponsableTecnico {
     private String dni;
     private String nombre;
