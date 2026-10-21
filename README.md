@@ -1,18 +1,25 @@
-## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+# 🌧️ Sistema de Gestión de Estaciones Meteorológicas
 
-## Folder Structure
+Proyecto desarrollado para la materia **Programación Orientada a Objetos** — Taller 2026.
 
-The workspace contains two folders by default, where:
+## Descripción
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Sistema centralizado en Java para gestionar la red regional de estaciones meteorológicas, en el marco del impacto climático del fenómeno de El Niño. Permite registrar lecturas de precipitación, evaluar umbrales críticos de riesgo por zona y activar un protocolo de alertas tempranas ante inundaciones y eventos severos.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+## Funcionalidades
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+* **Gestión de infraestructura meteorológica:** registro de zonas geográficas o cuencas hidrográficas, estaciones meteorológicas y sensores (pluviómetros).
+* **Administración de personal técnico:** registro de responsables técnicos, supervisión de estaciones/sensores y equipos de respuesta técnica.
+* **Registro y procesamiento de mediciones:** captura de lecturas periódicas de precipitación y validación de rangos físicos.
+* **Sistema de alerta temprana:** configuración de umbrales por zona y generación de alertas por severidad (Verde, Amarilla, Naranja, Roja) y tipo de evento (Lluvia Copiosa, Crecida de Río, Tormenta Severa).
+* **Informes:** histórico de precipitaciones, ranking de estaciones por volumetría, historial de alertas emitidas, ficha técnica operativa, informe de fallas y mantenimiento, y estadísticas de anomalía climática.
 
-## Dependency Management
+## Integrantes
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+| Benítez, Martina || Chavez, Alejo || Molina, Franco || Sosa, Mateo |
+
+## Requisitos
+
+* Java 17 o superior
+* JavaDoc para la documentación

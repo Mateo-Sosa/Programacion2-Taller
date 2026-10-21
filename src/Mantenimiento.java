@@ -1,0 +1,74 @@
+import java.time.LocalDateTime;
+public class Mantenimiento{
+    //Atributos
+    private String idMantenimiento;
+    private TipoMantenimiento tipo;
+    private LocalDateTime fecha;
+    private String descripcion;
+
+    //Relaciones
+    private ResponsableTecnico responsable;
+    private Sensor sensor;
+
+    //Constructor por defecto
+    public Mantenimiento(){
+    }
+
+    //Constructor Parametrizado
+    public Mantenimiento(String idMantenimiento, TipoMantenimiento tipo, LocalDateTime fecha, String descripcion, ResponsableTecnico responsable, EstacionMeteorologica estacion, Sensor sensor){
+        this.idMantenimiento = idMantenimiento;
+        this.tipo = tipo;
+        this.fecha = fecha;
+        this.descripcion = descripcion;
+        this.responsable = responsable;
+        this.estacion = estacion;
+        this.sensor = sensor;
+    }
+
+    //Getters
+    public String getIdMantenimiento(){
+        return idMantenimiento;
+    }
+    public TipoMantenimiento getTipo(){
+        return tipo;
+    }
+    public LocalDateTime getFecha(){
+        return fecha;
+    }
+    public String getDescripcion(){
+        return descripcion;
+    }
+    public ResponsableTecnico getResponsable() {
+        return responsable;
+    }
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    //Setters
+    public void setIdMantenimiento(String idMantenimiento){
+        this.idMantenimiento = idMantenimiento;
+    }
+    public void setTipo(TipoMantenimiento tipo){
+        this.tipo = tipo;
+    }
+    public void setFecha(LocalDateTime fecha){
+        this.fecha = fecha;
+    }
+    public void setDescripcion(String descripcion){
+        this.descripcion = descripcion;
+    }
+    public void setResponsable(ResponsableTecnico responsable) {
+        this.responsable = responsable;
+    }
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+    
+    //toString
+    @Override
+    public String toString() {
+        return "Id Mantenimiento: " + idMantenimiento + ", Tipo Mantenimiento: " + tipo + ", Fecha: " + fecha + ", Descripcion:" + descripcion;
+    }
+
+}

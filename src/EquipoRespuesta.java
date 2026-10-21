@@ -61,12 +61,11 @@ public class EquipoRespuesta{
         this.alertas = alertas;
     }
 
-    //Metodo para agregar integrantes
+    //Metodo para agregar integrante
     public void agregarIntegrante(ResponsableTecnico r) {
         this.responsablesTecnicos.add(r);
     }
     //Metodo para agregar alertas
-
     public void agregarAlerta(Alerta a) {
         this.alertas.add(a);
     }
