@@ -1,29 +1,16 @@
-<<<<<<< HEAD
-public abstract class Persona  {
+public abstract class Persona {
     //Atributos
-=======
-public abstract class Persona extends ResponsableTecnico {
->>>>>>> f6adcbd1d9effa67b1b07acff38b4ca246caa544
     private String dni;
     private String nombre;
     private String apellido;
     private String correoElectronico;
     private String celular;
 
-<<<<<<< HEAD
     //Constructor por defecto
-=======
-    //Constructor Vacio
->>>>>>> f6adcbd1d9effa67b1b07acff38b4ca246caa544
     public Persona(){
-
     }
 
-<<<<<<< HEAD
     //Constructor parametrizado
-=======
-    //Construnctor completo
->>>>>>> f6adcbd1d9effa67b1b07acff38b4ca246caa544
     public Persona(String dni, String nombre, String apellido, String correoElectronico,String celular){
         this.dni=dni;
         this.nombre=nombre;
@@ -73,22 +60,16 @@ public abstract class Persona extends ResponsableTecnico {
         this.celular = celular;
     }
 
-<<<<<<< HEAD
     //Get nombrecompleto
-=======
-    //get nombrecompleto
->>>>>>> f6adcbd1d9effa67b1b07acff38b4ca246caa544
     public String getNombreCompleto(){
         return this.nombre+ " " + this.apellido;
     }
-    
-<<<<<<< HEAD
+
     //toString
     public String toString(){
         return "Dni: " + dni + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Correo: " + correoElectronico + ", Telefono: " + celular;
     }
-=======
->>>>>>> f6adcbd1d9effa67b1b07acff38b4ca246caa544
+    
 }
 
 

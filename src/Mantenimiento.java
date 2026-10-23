@@ -1,9 +1,9 @@
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 public class Mantenimiento{
     //Atributos
     private String idMantenimiento;
     private TipoMantenimiento tipo;
-    private LocalDateTime fecha;
+    private LocalDate fecha;
     private String descripcion;
 
     //Relaciones
@@ -15,13 +15,12 @@ public class Mantenimiento{
     }
 
     //Constructor Parametrizado
-    public Mantenimiento(String idMantenimiento, TipoMantenimiento tipo, LocalDateTime fecha, String descripcion, ResponsableTecnico responsable, EstacionMeteorologica estacion, Sensor sensor){
+    public Mantenimiento(String idMantenimiento, TipoMantenimiento tipo, LocalDate fecha, String descripcion, ResponsableTecnico responsable, Sensor sensor){
         this.idMantenimiento = idMantenimiento;
         this.tipo = tipo;
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.responsable = responsable;
-        this.estacion = estacion;
         this.sensor = sensor;
     }
 
@@ -32,7 +31,7 @@ public class Mantenimiento{
     public TipoMantenimiento getTipo(){
         return tipo;
     }
-    public LocalDateTime getFecha(){
+    public LocalDate getFecha(){
         return fecha;
     }
     public String getDescripcion(){
@@ -52,7 +51,7 @@ public class Mantenimiento{
     public void setTipo(TipoMantenimiento tipo){
         this.tipo = tipo;
     }
-    public void setFecha(LocalDateTime fecha){
+    public void setFecha(LocalDate fecha){
         this.fecha = fecha;
     }
     public void setDescripcion(String descripcion){

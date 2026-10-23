@@ -98,6 +98,7 @@ public class Alerta {
     // metodo asignar equipo
     public void asignarEquipo(EquipoRespuesta e) {
         this.equipoRespuesta = e;
+        e.agregarAlerta(this);
     }
     
     // metodo si requiere equipo

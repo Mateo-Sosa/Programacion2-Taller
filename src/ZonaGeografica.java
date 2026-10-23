@@ -1,5 +1,5 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ZonaGeografica {
     //atributos
@@ -12,9 +12,9 @@ public class ZonaGeografica {
     private double umbralRoja;
     
     //relaciones
-    private List<ValorHistorico> valoresHistoricos;
-    private List<EstacionMeteorologica> estacionesMeteorologicas;
-    private List<Alerta> alertas;
+    private ArrayList<ValorHistorico> valoresHistoricos;
+    private ArrayList<EstacionMeteorologica> estacionesMeteorologicas;
+    private ArrayList<Alerta> alertas;
 
     //constructor por defecto
     public ZonaGeografica() {
@@ -67,15 +67,15 @@ public class ZonaGeografica {
         return umbralRoja;
     }
 
-    public List<ValorHistorico> getValoresHistoricos() {
+    public ArrayList<ValorHistorico> getValoresHistoricos() {
         return valoresHistoricos;
     }
 
-    public List<EstacionMeteorologica> getEstacionesMeteorologicas() {
+    public ArrayList<EstacionMeteorologica> getEstacionesMeteorologicas() {
         return estacionesMeteorologicas;
     }
 
-    public List<Alerta> getAlertas() {
+    public ArrayList<Alerta> getAlertas() {
         return alertas;
     }
  
@@ -108,32 +108,57 @@ public class ZonaGeografica {
         this.umbralRoja = umbralRoja;
     }
 
-    public void setValoresHistoricos(List<ValorHistorico> valoresHistoricos) {
+    public void setValoresHistoricos(ArrayList<ValorHistorico> valoresHistoricos) {
         this.valoresHistoricos = valoresHistoricos;
     }
 
-    public void setEstacionesMeteorologicas(List<EstacionMeteorologica> estacionesMeteorologicas) {
+    public void setEstacionesMeteorologicas(ArrayList<EstacionMeteorologica> estacionesMeteorologicas) {
         this.estacionesMeteorologicas = estacionesMeteorologicas;
     }
 
-    public void setAlertas(List<Alerta> alertas) {
+    public void setAlertas(ArrayList<Alerta> alertas) {
         this.alertas = alertas;
     }
     
     
     //metodo de lluvia acumulada en 24hs
     public double lluviaAcumulada24h() {
-        
+        LocalDateTime desde = LocalDateTime.now().minusHours(24);
+        double total = 0;
+        for (EstacionMeteorologica estacion : estacionesMeteorologicas) {
+            for (Sensor sensor : estacion.getSensores()) {
+                for (Medicion m : sensor.getMediciones()) {
+                    if (m.getFechaHora().isAfter(desde)) {
+                        total += m.getMilimetros();
+                    }
+                }
+            }
+        }
+        return total;
     }
     
     //metodo evaluar riesgo 
     public NivelAlerta evaluarRiesgo() {
-
+        double acumulado = lluviaAcumulada24h();
+        if (acumulado >= umbralRoja) {
+            nivelAlertaActual = NivelAlerta.ROJA;
+        } else if (acumulado >= umbralNaranja) {
+            nivelAlertaActual = NivelAlerta.NARANJA;
+        } else if (acumulado >= umbralAmarilla) {
+            nivelAlertaActual = NivelAlerta.AMARILLA;
+        } else {
+            nivelAlertaActual = NivelAlerta.VERDE;
+        }
+        return nivelAlertaActual;
     }
     
     //metodo emitir alerta 
     public Alerta emitirAlerta(TipoEventoClimatico ev) {
-
+        String id = idZona + "-A" + (alertas.size() + 1);
+        String descripcion = "Alerta de " + ev + " en la zona " + nombre;
+        Alerta alerta = new Alerta(id, LocalDateTime.now(), nivelAlertaActual, ev, descripcion, false, this);
+        alertas.add(alerta);
+        return alerta;
     }
     
     //metodo para agregar valor historico
@@ -156,8 +181,4 @@ public class ZonaGeografica {
     public String toString() {
         return "ZonaGeografica{" + "idZona=" + idZona + ", nombre=" + nombre + ", nivelVulnerabilidad=" + nivelVulnerabilidad + ", nivelAlertaActual=" + nivelAlertaActual + ", umbralAmarilla=" + umbralAmarilla + ", umbralNaranja=" + umbralNaranja + ", umbralRoja=" + umbralRoja + ", valoresHistoricos=" + valoresHistoricos + ", estacionesMeteorologicas=" + estacionesMeteorologicas + ", alertas=" + alertas + '}';
     }
-
-
-
-    
 }
