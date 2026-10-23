@@ -1,3 +1,4 @@
+
 public abstract class Persona {
     //Atributos
     private String dni;
@@ -9,7 +10,6 @@ public abstract class Persona {
     //Constructor por defecto
     public Persona(){
     }
-
     //Constructor parametrizado
     public Persona(String dni, String nombre, String apellido, String correoElectronico,String celular){
         this.dni=dni;
@@ -59,17 +59,13 @@ public abstract class Persona {
     public void setCelular(String celular) {
         this.celular = celular;
     }
-
     //Get nombrecompleto
     public String getNombreCompleto(){
         return this.nombre+ " " + this.apellido;
     }
-
     //toString
     public String toString(){
         return "Dni: " + dni + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Correo: " + correoElectronico + ", Telefono: " + celular;
     }
-    
 }
-
-
+   

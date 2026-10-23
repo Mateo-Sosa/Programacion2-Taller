@@ -22,3 +22,4 @@ Sistema centralizado en Java para gestionar la red regional de estaciones meteor
 
 * Java 17 o superior
 * JavaDoc para la documentación
+    

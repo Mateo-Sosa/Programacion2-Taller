@@ -15,7 +15,7 @@ public class Mantenimiento{
     }
 
     //Constructor Parametrizado
-    public Mantenimiento(String idMantenimiento, TipoMantenimiento tipo, LocalDate fecha, String descripcion, ResponsableTecnico responsable, Sensor sensor){
+    public Mantenimiento(String idMantenimiento, TipoMantenimiento tipo, LocalDate fecha, String descripcion, ResponsableTecnico responsable, EstacionMeteorologica estacion, Sensor sensor){
         this.idMantenimiento = idMantenimiento;
         this.tipo = tipo;
         this.fecha = fecha;
