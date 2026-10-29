@@ -63,7 +63,9 @@ public abstract class Persona {
     public String getNombreCompleto(){
         return this.nombre+ " " + this.apellido;
     }
+    
     //toString
+    @Override
     public String toString(){
         return "Dni: " + dni + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Correo: " + correoElectronico + ", Telefono: " + celular;
     }
