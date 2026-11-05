@@ -1,0 +1,76 @@
+package src.clases;
+import java.time.LocalDate;
+
+import src.enums.TipoMantenimiento;
+public class Mantenimiento{
+    //Atributos
+    private int idMantenimiento;
+    private TipoMantenimiento tipo;
+    private LocalDate fecha;
+    private String descripcion;
+
+    //Relaciones
+    private ResponsableTecnico responsable;
+    private Sensor sensor;
+
+    //Constructor por defecto
+    public Mantenimiento(){
+    }
+
+    //Constructor Parametrizado
+    public Mantenimiento(int idMantenimiento, TipoMantenimiento tipo, LocalDate fecha, String descripcion, ResponsableTecnico responsable, Sensor sensor){
+        this.idMantenimiento = idMantenimiento;
+        this.tipo = tipo;
+        this.fecha = fecha;
+        this.descripcion = descripcion;
+        this.responsable = responsable;
+        this.sensor = sensor;
+    }
+
+    //Getters
+    public int getIdMantenimiento(){
+        return idMantenimiento;
+    }
+    public TipoMantenimiento getTipo(){
+        return tipo;
+    }
+    public LocalDate getFecha(){
+        return fecha;
+    }
+    public String getDescripcion(){
+        return descripcion;
+    }
+    public ResponsableTecnico getResponsable() {
+        return responsable;
+    }
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    //Setters
+    public void setIdMantenimiento(int idMantenimiento){
+        this.idMantenimiento = idMantenimiento;
+    }
+    public void setTipo(TipoMantenimiento tipo){
+        this.tipo = tipo;
+    }
+    public void setFecha(LocalDate fecha){
+        this.fecha = fecha;
+    }
+    public void setDescripcion(String descripcion){
+        this.descripcion = descripcion;
+    }
+    public void setResponsable(ResponsableTecnico responsable) {
+        this.responsable = responsable;
+    }
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+    
+    //toString
+    @Override
+    public String toString() {
+        return "Id Mantenimiento: " + idMantenimiento + ", Tipo Mantenimiento: " + tipo + ", Fecha: " + fecha + ", Descripcion:" + descripcion;
+    }
+
+}
