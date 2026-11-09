@@ -47,8 +47,15 @@ public class EstacionMeteorologica {
     
     //metodo void para instalar sensor indicado en el UML
     public void instalarSensor(Sensor s) {
+        //Verificamos si el sensor ya tiene una estacion asignada
+        if (s.getEstacion() != null) {
+            System.out.println("ERROR: El sensor ID " + s.getIdSensor() + " ya se encuentra instalado en la estación " + s.getEstacion().getNombre());
+            return;
+        }
         this.sensores.add(s);
         s.setEstacion(this);
+        System.out.println("INFO: Sensor ID " + s.getIdSensor() + " instalado correctamente en la estacion '" + this.nombre);
+        
     }
     //Metodo void para retirar un sensor indicado en el UML
     public void retirarSensor(Sensor s) {

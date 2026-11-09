@@ -1,6 +1,5 @@
 package src.clases;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import src.enums.NivelAlerta;
 import src.enums.TipoEventoClimatico;
@@ -98,44 +97,34 @@ public class Alerta {
     public void setZonaGeografica(ZonaGeografica zonaGeografica) {
         this.zonaGeografica = zonaGeografica;
     }
-    
 
     // metodo asignar equipo
-    public void asignarEquipo(Alerta alerta,ArrayList<EquipoRespuesta> equipos) {
-        // 1. Validamos si el nivel de la alerta exige un equipo obligatoriamente
-        if (alerta.requiereEquipo()) {
-            boolean asignado = false;
+    public void asignarEquipo(EquipoRespuesta e) {
+        
+        //Validamos si el nivel de la alerta exige un equipo
+        if (this.requiereEquipo()) {
             
-            // 2. Recorremos manualmente la lista buscando un equipo libre
-            for (int i = 0; i < equipos.size(); i++) {
-                EquipoRespuesta equipo = equipos.get(i);
+            //Validamos que el equipo este libre
+            if (e.getDisponible()) {
                 
-                if (equipo.getDisponible()) {
-                    // 3. Asignamos el equipo (usando tu método que hace el doble enlace)
-                    alerta.asignarEquipo(equipo);
-                    
-                    // 4. Cambiamos el estado del equipo para que figure ocupado
-                    equipo.setDisponible(false);
-                    asignado = true;
-                    
-                    System.out.println("ÉXITO: Equipo '" + equipo.getNombreEquipo() + "' asignado a la alerta ID " + alerta.getIdAlerta());
-                    break; // Cortamos la búsqueda, ya cumplimos la regla
-                }
+                this.equipoRespuesta = e;
+                e.agregarAlerta(this);
+                
+                //Cambiamos el estado del equipo
+                e.setDisponible(false);
+
+                
+                System.out.println("EXITO: Equipo " + e.getNombreEquipo() + "asignado a la alerta ID " + this.getIdAlerta());
+                
+            } else {
+                System.out.println("ERROR: El equipo '" + e.getNombreEquipo() + " no esta disponible en este momento");
             }
             
-            // Si terminó el bucle y la bandera sigue en false, no había equipos libres
-            if (!asignado) {
-                System.out.println("CRÍTICO: No hay equipos de respuesta disponibles para la alerta ID " + alerta.getIdAlerta());
-            }
         } else {
-            System.out.println("INFO: La alerta ID " + alerta.getIdAlerta() + " (Nivel " + alerta.getNivel() + ") no requiere equipo.");
+            System.out.println("INFO: La alerta ID " + this.getIdAlerta() + " (Nivel " + this.getNivel() + ") no requiere equipo");
         }
     }
 
-    public void asignarEquipo(EquipoRespuesta e) {
-        this.equipoRespuesta = e;
-        e.agregarAlerta(this);
-    }
     // metodo si requiere equipo
     public boolean requiereEquipo(){
         return nivel == NivelAlerta.NARANJA || nivel == NivelAlerta.ROJA;

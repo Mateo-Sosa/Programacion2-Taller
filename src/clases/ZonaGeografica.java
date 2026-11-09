@@ -114,29 +114,29 @@ public class ZonaGeografica {
     
     //metodo evaluar riesgo 
     public NivelAlerta evaluarRiesgo() {
-        // 1. Obtenemos la lluvia acumulada de los sensores
+        //Obtenemos la lluvia acumulada de los sensores
         double acumulado = lluviaAcumulada24h();
         boolean superoUmbral = false;
         double umbralrojo = 150;
         double umbralnaranja = 100;
         double umbralamarilla = 50;
 
-        // 2. Evaluamos de mayor a menor para actualizar el nivel
+        //Evaluamos para actualizar el livel
         if (acumulado >= umbralrojo) {
             this.nivelAlertaActual = NivelAlerta.ROJA;
             superoUmbral = true;
-        } else if (acumulado < umbralnaranja) {
+        } else if (acumulado >= umbralnaranja) { 
             this.nivelAlertaActual = NivelAlerta.NARANJA;
             superoUmbral = true;
         } else if (acumulado >= umbralamarilla) {
             this.nivelAlertaActual = NivelAlerta.AMARILLA;
             superoUmbral = true;
-        } else if (acumulado < umbralamarilla){
+        } else { 
             this.nivelAlertaActual = NivelAlerta.VERDE;
             superoUmbral = false;
         }
 
-        // 3. Disparo de alerta si corresponde
+        //Activacion de alerta si corresponde
         if (superoUmbral) {
             this.emitirAlerta(TipoEventoClimatico.LLUVIA_COPIOSA);
         }
@@ -151,25 +151,24 @@ public class ZonaGeografica {
         alertas.add(alerta);
         return alerta;
     }
-    // Método para registro manual por un operador
+    // Metodo para registro manual por un operador
     public Alerta registrarAlertaManual(TipoEventoClimatico evento, NivelAlerta nivel, String descripcion) {
-        // 1. Validamos que el tipo de evento sea uno de los permitidos para registro manual
+        //Validamos que el tipo de evento sea uno de los permitidos para registro manual
         if (evento != TipoEventoClimatico.CRECIDA_RIO && evento != TipoEventoClimatico.TORMENTA_SEVERA) {
-            System.out.println("ERROR: El operador solo puede registrar alertas de CRECIDA_RIO o TORMENTA_SEVERA.");
+            System.out.println("ERROR: Solo el operador puede registrar alertas de CRECIDA_RIO o TORMENTA_SEVERA");
             return null; 
         }
         
-        // 2. Generamos el ID secuencial basado en el tamaño actual de la lista
+        //Generamos el ID 
         int id = (this.alertas.size() + 1);
         
-        // 3. Instanciamos la alerta usando el nivel y la descripción que pasó el operador por parámetro
+        //Creamos la alerta usando el nivel y la descripcion que paso el operador por parametro
         Alerta nuevaAlerta = new Alerta(id, LocalDateTime.now(), nivel, evento, descripcion, false, this);
         
-        // 4. Agregamos a la lista de alertas de la zona
+        //Agregamos a la lista de alertas de la zona
         this.alertas.add(nuevaAlerta);
         
-        System.out.println("ÉXITO: Operador registró una alerta de " + evento + " (Nivel: " + nivel + ") en la zona '" + this.nombre + "'.");
-        
+        System.out.println("EXITO: Operador registro una alerta de " + evento + " (Nivel: " + nivel + ") en la zona '" + this.nombre);
         return nuevaAlerta;
     }
     

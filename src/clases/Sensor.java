@@ -22,7 +22,7 @@ public class Sensor {
     private LocalDate ultimaCalibracion;
 
     //Relaciones
-    private List<Medicion> mediciones; //composicion con la clase medicion
+    private List<Medicion> mediciones;
     private List<Mantenimiento> mantenimientos;
     private EstacionMeteorologica estacion;
 
@@ -44,45 +44,44 @@ public class Sensor {
         this.mantenimientos = new ArrayList<Mantenimiento>();
     }
 
-    //metodo incompleto falta validar el valor y si la medicion es anomala
     public Medicion registrar(double mm, LocalDateTime fh) {
-        // 1. Control operativo (Sensor)
+        //Control operativo (Sensor)
         if (this.estado != EstadoOperativo.OPERATIVO) {
-            System.out.println("Registro denegado: El sensor no se encuentra operativo.");
+            System.out.println("Registro denegado: El sensor no se encuentra operativo");
             return null;
         }
 
-        // Control operativo de la ESTACIÓN
+        //Control operativo (Estacion)
         if (this.estacion != null) {
             EstadoOperativo estadoEst = this.estacion.getEstado();
             if (estadoEst == EstadoOperativo.EN_MANTENIMIENTO || estadoEst == EstadoOperativo.FUERA_DE_SERVICIO) {
-                System.out.println("Registro denegado: La estación está " + estadoEst);
+                System.out.println("Registro denegado: La estacion esta en estado " + estadoEst);
                 return null;
             }
         } else {
-            System.out.println("Error: El sensor no está asignado a ninguna estación.");
+            System.out.println("Error: El sensor no esta asignado a ninguna estacion");
             return null;
         }
 
-        // 2. Validación de lecturas (usa el método validar que ya tenés)
+        //Validacion de lecturas
         if (!validar(mm)) {
-            System.out.println("Registro denegado: Valor de lectura inválido.");
+            System.out.println("Registro denegado: Valor de lectura invalido");
             return null;
         }
 
-        // 3. Detección de lectura anómala
+        //Deteccion de lectura anomala
         boolean esAnomala = false;
         if (!mediciones.isEmpty()) {
             Medicion ultima = mediciones.get(mediciones.size() - 1);
             double diferencia = mm - ultima.getMilimetros();
             
-            // Verificación manual de la diferencia absoluta
+            //Verificacion de la diferencia absoluta
             if (diferencia > 100) {
                 esAnomala = true;
             }
         }
 
-        // Registro exitoso de la medición
+        //Registro de la medicion
         int id = mediciones.size() + 1;
         Medicion nueva = new Medicion(id, fh, mm, esAnomala);
         mediciones.add(nueva);
