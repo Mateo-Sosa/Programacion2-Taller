@@ -1,7 +1,7 @@
 package src.clases;
 import java.time.LocalDate;
 
-import src.enums.TipoMantenimiento;
+import src.enums.*;
 public class Mantenimiento{
     //Atributos
     private int idMantenimiento;

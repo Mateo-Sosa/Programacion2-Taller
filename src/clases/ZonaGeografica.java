@@ -2,9 +2,8 @@ package src.clases;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import src.enums.NivelAlerta;
-import src.enums.NivelVulnerabilidad;
-import src.enums.TipoEventoClimatico;
+import src.enums.*;
+import src.excepciones.*;
 
 public class ZonaGeografica {
     //atributos
@@ -152,11 +151,10 @@ public class ZonaGeografica {
         return alerta;
     }
     // Metodo para registro manual por un operador
-    public Alerta registrarAlertaManual(TipoEventoClimatico evento, NivelAlerta nivel, String descripcion) {
+    public Alerta registrarAlertaManual(TipoEventoClimatico evento, NivelAlerta nivel, String descripcion) throws AsignacionInvalidaException {
         //Validamos que el tipo de evento sea uno de los permitidos para registro manual
         if (evento != TipoEventoClimatico.CRECIDA_RIO && evento != TipoEventoClimatico.TORMENTA_SEVERA) {
-            System.out.println("ERROR: Solo el operador puede registrar alertas de CRECIDA_RIO o TORMENTA_SEVERA");
-            return null; 
+            throw new AsignacionInvalidaException("Solo el operador puede registrar alertas de CRECIDA_RIO o TORMENTA_SEVERA.");
         }
         
         //Generamos el ID 

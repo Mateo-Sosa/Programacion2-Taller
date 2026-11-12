@@ -1,8 +1,8 @@
 package src.clases;
 import java.time.LocalDateTime;
 
-import src.enums.NivelAlerta;
-import src.enums.TipoEventoClimatico;
+import src.enums.*;
+import src.excepciones.*;
 
 public class Alerta {
     //atributos
@@ -99,8 +99,11 @@ public class Alerta {
     }
 
     // metodo asignar equipo
-    public void asignarEquipo(EquipoRespuesta e) {
-        
+    public void asignarEquipo(EquipoRespuesta e) throws AsignacionInvalidaException, EquipoOcupadoException {
+        // Validamos si el nivel de la alerta exige un equipo (Naranja o Roja)
+        if (!this.requiereEquipo()) {
+            throw new AsignacionInvalidaException("La alerta ID " + this.getIdAlerta() + " (Nivel " + this.getNivel() + ") no requiere equipo de respuesta");
+        }
         //Validamos si el nivel de la alerta exige un equipo
         if (this.requiereEquipo()) {
             

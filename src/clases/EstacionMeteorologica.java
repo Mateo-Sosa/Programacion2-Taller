@@ -1,9 +1,8 @@
 package src.clases;
 import java.util.List;
 
-import src.enums.EstadoOperativo;
-import src.enums.TipoEstacion;
-import src.enums.TipoMantenimiento;
+import src.enums.*;
+import src.excepciones.*;
 
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -46,20 +45,23 @@ public class EstacionMeteorologica {
     }
     
     //metodo void para instalar sensor indicado en el UML
-    public void instalarSensor(Sensor s) {
+    public void instalarSensor(Sensor s) throws AsignacionInvalidaException{
         //Verificamos si el sensor ya tiene una estacion asignada
         if (s.getEstacion() != null) {
-            System.out.println("ERROR: El sensor ID " + s.getIdSensor() + " ya se encuentra instalado en la estación " + s.getEstacion().getNombre());
-            return;
+            throw new AsignacionInvalidaException("El sensor ya está instalado en una estación");
+        }
+        if (s.getEstado() != EstadoOperativo.OPERATIVO) {
+            throw new AsignacionInvalidaException("Solo se puede instalar un sensor operativo");
         }
         this.sensores.add(s);
-        s.setEstacion(this);
-        System.out.println("INFO: Sensor ID " + s.getIdSensor() + " instalado correctamente en la estacion '" + this.nombre);
-        
+        s.setEstacion(this);    
     }
     //Metodo void para retirar un sensor indicado en el UML
     public void retirarSensor(Sensor s) {
-        sensores.remove(s);
+        if (s != null && sensores.contains(s)) {
+            sensores.remove(s);
+            s.setEstacion(null); // Desvinculamos la estación del lado del sensor
+        }
     }
 
     //Metodo para Gestion de infraestructura meteorologica

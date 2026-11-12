@@ -71,4 +71,3 @@ public abstract class Persona {
         return "Dni: " + dni + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Correo: " + correoElectronico + ", Telefono: " + celular;
     }
 }
-   

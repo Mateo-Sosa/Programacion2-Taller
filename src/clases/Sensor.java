@@ -1,7 +1,8 @@
 package src.clases;
 import java.util.List;
 
-import src.enums.EstadoOperativo;
+import src.enums.*;
+import src.excepciones.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,30 +45,24 @@ public class Sensor {
         this.mantenimientos = new ArrayList<Mantenimiento>();
     }
 
-    public Medicion registrar(double mm, LocalDateTime fh) {
+    public Medicion registrar(double mm, LocalDateTime fh) throws LecturaInvalidaException, AsignacionInvalidaException{
         //Control operativo (Sensor)
         if (this.estado != EstadoOperativo.OPERATIVO) {
-            System.out.println("Registro denegado: El sensor no se encuentra operativo");
-            return null;
+            throw new AsignacionInvalidaException("Registro denegado: El sensor ID " + this.idSensor + " no se encuentra operativo (Estado: " + this.estado + ")");
         }
 
         //Control operativo (Estacion)
         if (this.estacion != null) {
             EstadoOperativo estadoEst = this.estacion.getEstado();
             if (estadoEst == EstadoOperativo.EN_MANTENIMIENTO || estadoEst == EstadoOperativo.FUERA_DE_SERVICIO) {
-                System.out.println("Registro denegado: La estacion esta en estado " + estadoEst);
-                return null;
+                throw new AsignacionInvalidaException("Registro denegado: La estación '" + this.estacion.getNombre() + " esta en estado " + estadoEst);
             }
         } else {
-            System.out.println("Error: El sensor no esta asignado a ninguna estacion");
-            return null;
+            throw new AsignacionInvalidaException("Error: El sensor ID " + this.idSensor + " no esta asignado a ninguna estacion");
         }
 
         //Validacion de lecturas
-        if (!validar(mm)) {
-            System.out.println("Registro denegado: Valor de lectura invalido");
-            return null;
-        }
+        validar(mm);
 
         //Deteccion de lectura anomala
         boolean esAnomala = false;
@@ -87,16 +82,17 @@ public class Sensor {
         mediciones.add(nueva);
         return nueva;
     }
-
-    
     
     //metodo para validar
-    public boolean validar(double mm) {
-        return mm >= 0 && mm <= 500;
+    public boolean validar(double mm) throws LecturaInvalidaException{
+        if (mm < 0 || mm > 500) {
+        throw new LecturaInvalidaException("Valor fuera de rango (0-500 mm): " + mm);
+        }
+        return true;
     }
 
     //metodo para verificar si requiere calibracion
-    public boolean requiereCalibracion() {
+    public boolean requiereCalibracion(){
         return LocalDate.now().isAfter(ultimaCalibracion.plusMonths(12));
     }
    
