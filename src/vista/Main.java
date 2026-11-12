@@ -1,7 +1,6 @@
-package src;
+package src.vista;
 import src.clases.*;
 import src.precarga.*;
-import src.vista.*;
 public class Main {
     public static void main(String[] args) throws Exception{
         

@@ -169,7 +169,6 @@ public class Gestora {
     }
 
     // RANKING DE ESTACIONES
- 
     /**
      * Ranking de estaciones de mayor a menor acumulado de precipitacion entre dos fechas (inclusive).
      */
@@ -188,7 +187,6 @@ public class Gestora {
     }
  
     // HISTORIAL DE ALERTAS 
- 
     /**
      * Historial de alertas emitidas, ordenado por fecha. Cada filtro es opcional: si se pasa null no se aplica.
      */
@@ -209,37 +207,39 @@ public class Gestora {
         System.out.println("=== HISTORIAL DE ALERTAS ===");
         for (Alerta alerta : alertas) {
             String equipo = (alerta.getEquipoRespuesta() == null) ? "sin equipo" : alerta.getEquipoRespuesta().getNombreEquipo();
-            System.out.println(alerta.getFechaHoraEmision().withNano(0) + " | " + alerta.getZonaGeografica().getNombre() + " | " + alerta.getNivel()
+            System.out.println(alerta.getFechaHoraEmision() + " | " + alerta.getZonaGeografica().getNombre() + " | " + alerta.getNivel()
                     + " | " + alerta.getEvento() + " | " + equipo + " | " + alerta.getDescripcion());
         }
         System.out.println("Total de alertas: " + alertas.size());
     }
  
     //  FICHA TECNICA OPERATIVA 
- 
     /**
-     * Ficha tecnica de una estacion: datos, responsable, estado de sus sensores y sus ultimas lecturas.
+     * Ficha tecnica de una estacion: datos, responsable, estado de sus sensores y sus ultimas lecturas
      */
     public void fichaTecnica(EstacionMeteorologica estacion) {
         ResponsableTecnico responsable = estacion.getResponsable();
         System.out.println(" FICHA TECNICA - " + estacion.getNombre() + " [" + estacion.getIdEstacion() + "] | " + estacion.getTipo() + " | " + estacion.getEstado());
         System.out.println("Responsable: " + responsable.getNombreCompleto() + " | " + responsable.getEspecialidad() + " | licencia "
                 + responsable.getNumeroLicencia() + " | " + responsable.getCorreoElectronico() + " | " + responsable.getCelular());
- 
+        
         Comparator<Medicion> porFecha = (a, b) -> a.getFechaHora().compareTo(b.getFechaHora());
         for (Sensor sensor : estacion.getSensores()) {
             System.out.println("Sensor " + sensor.getIdSensor() + " " + sensor.getMarca() + " " + sensor.getModelo() + " | " + sensor.getEstado()
                     + " | ultima calibracion: " + sensor.getUltimaCalibracion() + " | requiere calibracion: " + sensor.requiereCalibracion());
             List<Medicion> lecturas = new ArrayList<Medicion>(sensor.getMediciones());
             Collections.sort(lecturas, porFecha);
-            for (Medicion medicion : lecturas.subList(Math.max(0, lecturas.size() - 3), lecturas.size())) {
-                System.out.println(medicion.getFechaHora().withNano(0) + " | " + medicion.getMilimetros() + " mm" + (medicion.isAnomala() ? " (ANOMALA)" : ""));
+            for (int i = 0; i < lecturas.size(); i++) {
+            // Si la posición actual 'i' es mayor o igual al tamaño total menos 3, lo mostramos
+                if (i >= lecturas.size() - 3) {
+                Medicion medicion = lecturas.get(i);
+                System.out.println(medicion.getFechaHora() + " | " + medicion.getMilimetros() + " mm" + (medicion.isAnomala() ? " (ANOMALA)" : ""));
+                }
             }
         }
     }
- 
+
     //  FALLAS Y MANTENIMIENTO 
- 
     /**
      * Informe de fallas: sensores fuera de servicio o en mantenimiento, lecturas anomalas y sensores que requieren calibracion.
      */
@@ -261,7 +261,6 @@ public class Gestora {
     }
  
     //  ANOMALIA CLIMATICA 
- 
     /**
      * Porcentaje de desviacion del acumulado de un mes de la zona respecto de su media historica
      * Un valor positivo indica mas lluvia que la media.
@@ -284,7 +283,6 @@ public class Gestora {
     }
  
     //  Metodos auxiliares 
- 
     //milimetros acumulados entre dos fechas (inclusive) por una lista de estaciones
     private double acumulado(List<EstacionMeteorologica> lista, LocalDate desde, LocalDate hasta) {
         double total = 0;

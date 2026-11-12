@@ -34,26 +34,13 @@ public class Menu {
             System.out.println();
 
             switch (opcion) {
-                case 1:
-                    menuZonasYEstaciones();
-                    break;
-                case 2:
-                    menuSensores();
-                    break;
-                case 3:
-                    menuAlertas();
-                    break;
-                case 4:
-                    menuPersonalTecnico();
-                    break;
-                case 5:
-                    menuInformesYReportes();
-                    break;
-                case 0:
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opcion no valida. Intente nuevamente.\n");
+                case 1:menuZonasYEstaciones();break;
+                case 2:menuSensores();break;
+                case 3:menuAlertas();break;
+                case 4:menuPersonalTecnico();break;
+                case 5:menuInformesYReportes();break;
+                case 0:System.out.println("Saliendo del sistema...");break;
+                default:System.out.println("Opcion no valida. Intente nuevamente.\n");
             }
         } while (opcion != 0);
     }
@@ -72,28 +59,46 @@ public class Menu {
             System.out.println("0. Volver");
             System.out.print("Seleccione una opcion: ");
             
-            op = leerEntero();
-            
-            if (op == 1) {
-                System.out.println("\nZONAS:");
-                for (ZonaGeografica z : gestora.getZonas()) {
-                    System.out.println("- ID " + z.getIdZona() + ": " + z.getNombre() + " (Nivel actual: " + z.getNivelAlertaActual() + ")");
+            try {
+                op = Integer.parseInt(scanner.nextLine().trim());
+                switch (op) {
+                    case 1:mostrarZonas();break;
+                    case 2:mostrarEstaciones(); break;
+                    case 3:agregarNuevaZona(); break;
+                    case 4:agregarNuevaEstacion();break;
+                    case 5:eliminarZona();break;
+                    case 6:eliminarEstacion();break;
+                    case 0:break;
+                    default:System.out.println("\n Opcion inválida");
                 }
-            } else if (op == 2) {
-                System.out.println("\nESTACIONES:");
-                for (EstacionMeteorologica e : gestora.getEstaciones()) {
-                    System.out.println("- ID " + e.getIdEstacion() + ": " + e.getNombre() + "| " + "Estado: "  + e.getEstado());
-                }
-            } else if (op == 3) {
-                agregarNuevaZona();
-            } else if (op == 4) {
-                agregarNuevaEstacion();
-            } else if (op == 5) {
-                eliminarZona();          
-            } else if (op == 6) {
-                eliminarEstacion();    
+            } catch (NumberFormatException e) {
+                System.out.println("\n Ingresa un numero valido");
+                op = -1;
             }
         } while (op != 0);
+    }
+    // Metodo para listar todas las zonas
+    private void mostrarZonas() {
+        System.out.println("\nZONAS REGISTRADAS:");
+        if (gestora.getZonas().isEmpty()) {
+            System.out.println(" No hay zonas registradas en el sistema");
+        } else {
+            for (ZonaGeografica z : gestora.getZonas()) {
+                System.out.println("- ID " + z.getIdZona() + ": " + z.getNombre() + " (Nivel actual: " + z.getNivelAlertaActual() + ")");
+            }
+        }
+    }
+
+    // Metodo para listar todas las estaciones
+    private void mostrarEstaciones() {
+        System.out.println("\nESTACIONES METEOROLOGICAS:");
+        if (gestora.getEstaciones().isEmpty()) {
+            System.out.println(" No hay estaciones registradas en el sistema");
+        } else {
+            for (EstacionMeteorologica e : gestora.getEstaciones()) {
+                System.out.println("- ID " + e.getIdEstacion() + ": " + e.getNombre() + " | Estado: "  + e.getEstado());
+            }
+        }
     }
 
     // Metodo para crear nueva zona
@@ -176,7 +181,7 @@ public class Menu {
             System.out.println(" ERROR: " + e.getMessage());
         }
     }
-    // Método para eliminar una zona geografica
+    // Metodo para eliminar una zona geografica
     private void eliminarZona() {
         System.out.println("\n--- ELIMINAR ZONA GEOGRAFICA ---");
         if (gestora.getZonas().isEmpty()) {
@@ -205,7 +210,7 @@ public class Menu {
             return;
         }
 
-        // Validación de negocio: No eliminar si tiene estaciones asociadas
+        // Validacion de negocio: No eliminar si tiene estaciones asociadas
         if (!zonaEncontrada.getEstacionesMeteorologicas().isEmpty()) {
             System.out.println(" No se puede eliminar la zona '" + zonaEncontrada.getNombre() + 
                                " porque tiene estaciones meteorologicas asociadas. Debe reubicarlas o eliminarlas primero.");
@@ -217,7 +222,7 @@ public class Menu {
         System.out.println(" La zona geográfica fue eliminada correctamente del sistema");
     }
 
-    // Método para eliminar una estación meteorológica
+    // Metodo para eliminar una estacion meteorológica
     private void eliminarEstacion() {
         System.out.println("\n--- ELIMINAR ESTACION METEOROLOGICA ---");
         if (gestora.getEstaciones().isEmpty()) {
@@ -228,7 +233,7 @@ public class Menu {
         System.out.println("Estaciones disponibles:");
         for (EstacionMeteorologica e : gestora.getEstaciones()) {
             String zonaAsociada = "Sin zona";
-            // Buscamos a qué zona pertenece para mostrar mejor info
+            // Buscamos a que zona pertenece para mostrar mejor info
             for (ZonaGeografica z : gestora.getZonas()) {
                 if (z.getEstacionesMeteorologicas().contains(e)) {
                     zonaAsociada = z.getNombre();
@@ -254,14 +259,14 @@ public class Menu {
             return;
         }
 
-        // Validación de negocio: No eliminar si tiene sensores instalados
+        // Validacion de negocio: No eliminar si tiene sensores instalados
         if (!estacionEncontrada.getSensores().isEmpty()) {
             System.out.println(" No se puede eliminar la estación '" + estacionEncontrada.getNombre() + 
                                " porque tiene sensores instalados. Debe retirarlos previamente");
             return;
         }
 
-        //  La removemos de la lista de la Zona geográfica a la que pertenezca
+        //  La eliminamos de la lista de la Zona geografica a la que pertenezca
         for (ZonaGeografica z : gestora.getZonas()) {
             if (z.getEstacionesMeteorologicas().contains(estacionEncontrada)) {
                 z.getEstacionesMeteorologicas().remove(estacionEncontrada);
@@ -269,12 +274,12 @@ public class Menu {
             }
         }
 
-        // La removemos de la lista general de estaciones de la gestora
+        // La eliminamos de la lista general de estaciones de la gestora
         gestora.getEstaciones().remove(estacionEncontrada);
         System.out.println(" La estación meteorológica fue eliminada correctamente del sistema");
     }
 
-    // ================= 2. SENSORES =================
+    //  SENSORES 
     private void menuSensores() {
         int op = -1;
         do {
@@ -287,30 +292,36 @@ public class Menu {
             System.out.println("0. Volver");
             System.out.print("Seleccione una opcion: ");
             
-            op = leerEntero();
-
-            if (op == 1) {
-                System.out.println("\nSENSORES:");
-                if (gestora.getSensores().isEmpty()) {
-                    System.out.println("No hay sensores registrados.");
-                } else {
-                    for (Sensor s : gestora.getSensores()) {
-                        String est = (s.getEstacion() != null) ? s.getEstacion().getNombre() : "Sin asignar";
-                        System.out.println("- ID " + s.getIdSensor() + " [" + s.getMarca() + " " + s.getModelo() + "] | Estado: " + s.getEstado() + " | Estación: " + est);
-                    }
+            try {
+                op = Integer.parseInt(scanner.nextLine().trim());
+                switch (op) {
+                    case 1:mostrarSensores();break;
+                    case 2:agregarNuevoSensor();break;
+                    case 3:registrarMedicion();break;
+                    case 4:verMedicionesSensor();break;
+                    case 5:retirarSensor();break;
+                    case 0:break;
+                    default:System.out.println("\n Opcion invalida");
                 }
-            } else if (op == 2) {
-                agregarNuevoSensor();
-            } else if (op == 3) {
-                registrarMedicion();
-            } else if (op == 4) {
-                verMedicionesSensor();
-            } else if (op == 5) {
-                retirarSensor(); 
+            } catch (NumberFormatException e) {
+                System.out.println("\n Ingresa un numero valido");
+                op = -1;
             }
         } while (op != 0);
     }
-    // Método auxiliar para crear sensores
+    // Metodo para listar todos los sensores registrados
+    private void mostrarSensores() {
+        System.out.println("\nSENSORES REGISTRADOS:");
+        if (gestora.getSensores().isEmpty()) {
+            System.out.println(" No hay sensores registrados.");
+        } else {
+            for (Sensor s : gestora.getSensores()) {
+                String est = (s.getEstacion() != null) ? s.getEstacion().getNombre() : "Sin asignar";
+                System.out.println("- ID " + s.getIdSensor() + " [" + s.getMarca() + " | " + s.getModelo() + "] | Estado: " + s.getEstado() + " | Estación: " + est );
+            }
+        }
+    }
+    // Metodo para crear sensores
     private void agregarNuevoSensor() {
         System.out.println("\n-- ALTA DE NUEVO SENSOR --");
         
@@ -352,7 +363,7 @@ public class Menu {
         try {
             estacionElegida.instalarSensor(nuevoSensor);
             gestora.agregarSensor(nuevoSensor);
-            System.out.println(" Sensor " + marca + " " + modelo + " instalado correctamente en la estación '" + estacionElegida.getNombre());
+            System.out.println(" Sensor " + marca + " " + modelo + " instalado correctamente en la estación " + estacionElegida.getNombre());
         } catch (src.excepciones.AsignacionInvalidaException e) {
             System.out.println(" ERROR DE ASIGNACION: " + e.getMessage());
         }
@@ -378,27 +389,27 @@ public class Menu {
         }
 
         if (sensorEncontrado == null) {
-            System.out.println("Error: No se encontro ningun sensor con ese ID.\n");
+            System.out.println("Error: No se encontro ningun sensor con ese ID\n");
             return;
         }
 
-        System.out.print("Ingrese los milímetros de lluvia (mm): ");
+        System.out.print("Ingrese los milimetros de lluvia (mm): ");
         try {
             double mm = Double.parseDouble(scanner.nextLine());
             
             Medicion m = sensorEncontrado.registrar(mm, LocalDateTime.now());
             if (m != null) {
-                System.out.println("-> ¡ÉXITO! Medición registrada exitosamente.");
+                System.out.println("Medicion registrada exitosamente");
                 
                 // EVALUAMOS EL RIESGO AUTOMATICAMENTE DE LA ZONA DE ESTE SENSOR
                 if (sensorEncontrado.getEstacion() != null) {
-                    // Buscamos la zona a la que pertenece la estación del sensor
+                    // Buscamos la zona a la que pertenece la estacion del sensor
                     for (ZonaGeografica z : gestora.getZonas()) {
                         if (z.getEstacionesMeteorologicas().contains(sensorEncontrado.getEstacion())) {
                             NivelAlerta previo = z.getNivelAlertaActual();
                             NivelAlerta nuevo = z.evaluarRiesgo(); // Aqui recalcula y emite alerta si supero umbral
                             if (nuevo != previo) {
-                                System.out.println("-> ¡ATENCIÓN! La zona '" + z.getNombre() + "' cambió su nivel de alerta a: " + nuevo);
+                                System.out.println(" La zona " + z.getNombre() + " cambio su nivel de alerta a: " + nuevo);
                             }
                             break;
                         }
@@ -406,17 +417,18 @@ public class Menu {
                 }
             }
         } catch (NumberFormatException e) {
-            System.out.println("-> ERROR: Formato de número inválido.\n");
+            System.out.println(" Formato de numero invalido\n");
         } catch (src.excepciones.LecturaInvalidaException | src.excepciones.AsignacionInvalidaException e) {
-            System.out.println("-> ERROR: " + e.getMessage() + "\n");
+            System.out.println("das" + e.getMessage() + "\n");
         }
     }
-    // Metodo auxiliar para consultar el historial de mediciones de un sensor
+
+    // Metodo  para consultar el historial de mediciones de un sensor
     private void verMedicionesSensor() {
         System.out.println("\n-- CONSULTAR MEDICIONES DE SENSOR --");
 
         if (gestora.getSensores().isEmpty()) {
-            System.out.println("No hay sensores registrados en el sistema.");
+            System.out.println("No hay sensores registrados en el sistema");
             return;
         }
 
@@ -424,7 +436,7 @@ public class Menu {
         System.out.println("Sensores disponibles:");
         for (int i = 0; i < gestora.getSensores().size(); i++) {
             Sensor s = gestora.getSensores().get(i);
-            String estNombre = (s.getEstacion() != null) ? s.getEstacion().getNombre() : "Sin estación";
+            String estNombre = (s.getEstacion() != null) ? s.getEstacion().getNombre() : "Sin estacion";
             System.out.println((i + 1) + ". Sensor ID " + s.getIdSensor() + " (" + s.getMarca() + " " + s.getModelo() + ") - Estación: " + estNombre);
         }
 
@@ -438,17 +450,16 @@ public class Menu {
 
         Sensor sensorElegido = gestora.getSensores().get(idx);
 
-        //Mostramos la cabecera y recorremos sus mediciones
-        System.out.println("\n=== HISTORIAL DE MEDICIONES (Sensor ID: " + sensorElegido.getIdSensor() + ") ===");
+        System.out.println("\n=== HISTORIAL DE MEDICIONES (Sensor ID: " + sensorElegido.getIdSensor());
         
         if (sensorElegido.getMediciones().isEmpty()) {
-            System.out.println("   Este sensor aún no registra mediciones históricas.");
+            System.out.println("Este sensor no registra mediciones historicas");
         } else {
             int nro = 1;
             for (Medicion m : sensorElegido.getMediciones()) {
                 // Formateamos la fecha y hora
                 String fh = m.getFechaHora().toString().replace('T', ' ').substring(0, 16);
-                
+
                 String alertaAnomala = m.isAnomala() ? " [ANÓMALA]" : "";
                 
                 System.out.println("   " + nro + ". Fecha/Hora: " + fh + " | Valor: " + m.getMilimetros() + " mm" + alertaAnomala);
@@ -456,6 +467,8 @@ public class Menu {
             }
         }
     }
+
+    // Metodo para retirar Sensor
     private void retirarSensor() {
         System.out.println("\n-- RETIRAR SENSOR DE ESTACION --");
 
@@ -464,7 +477,7 @@ public class Menu {
             return;
         }
 
-        // 1. Listamos los sensores instalados
+        // Listamos los sensores instalados
         List<Sensor> sensoresInstalados = new ArrayList<>();
         for (Sensor s : gestora.getSensores()) {
             if (s.getEstacion() != null) {
@@ -479,26 +492,25 @@ public class Menu {
 
         for (int i = 0; i < sensoresInstalados.size(); i++) {
             Sensor s = sensoresInstalados.get(i);
-            System.out.println((i + 1) + ". Sensor ID " + s.getIdSensor() + " (" + s.getMarca() + ") - Estación: " + s.getEstacion().getNombre());
+            System.out.println((i + 1) + ". Sensor ID " + s.getIdSensor() + " (" + s.getMarca() + ") - Estacion: " + s.getEstacion().getNombre());
         }
 
         System.out.print("Seleccione el numero del sensor que desea retirar: ");
         int idx = leerEntero() - 1;
 
         if (idx < 0 || idx >= sensoresInstalados.size()) {
-            System.out.println("Opción invalida");
+            System.out.println("Opcion invalida");
             return;
         }
 
+        // Retiramos el sensor seleccionado
         Sensor sensorElegido = sensoresInstalados.get(idx);
         EstacionMeteorologica estacionActual = sensorElegido.getEstacion();
 
-        // 2. USAMOS LOS MÉTODOS DE TUS CLASES (Encapsulación correcta)
-        // (Ajustá el nombre del método de la estación si en lugar de 'removerSensor' o 'quitarSensor' se llama distinto)
-        estacionActual.retirarSensor(sensorElegido); // O el método que tengas en EstacionMeteorologica
+        estacionActual.retirarSensor(sensorElegido); 
 
         System.out.println(" El sensor ID " + sensorElegido.getIdSensor() + 
-                           " fue retirado correctamente de la estación " + estacionActual.getNombre());
+                           " fue retirado correctamente de la estacion " + estacionActual.getNombre());
     }
 
     //  ALERTAS 
@@ -512,19 +524,24 @@ public class Menu {
             System.out.println("0. Volver");
             System.out.print("Seleccione una opción: ");
 
-            op = leerEntero();
-
-            if (op == 1) {
-                gestora.historialAlertas(null, null, null, null);
-            } else if (op == 2) {
-                agregarAlertaManual();
-            } else if (op == 3) {
-                asignarEquipoAlerta(); 
+            try {
+                op = Integer.parseInt(scanner.nextLine().trim());
+                switch (op) {
+                    case 1:gestora.historialAlertas(null, null, null, null);break;
+                    case 2:agregarAlertaManual();break;
+                    case 3:asignarEquipoAlerta();break;
+                    case 0:break;
+                    default:
+                        System.out.println("\n Opcion invalida");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\n Ingresa un numero valido");
+                op = -1;
             }
         } while (op != 0);
     }
 
-    // Metodo auxiliar para crear y asignar una alerta por consola
+    // Metodo para crear y asignar una alerta por consola
     private void agregarAlertaManual() {
         System.out.println("\n--- ALTA MANUAL DE ALERTA ---");
         
@@ -557,7 +574,7 @@ public class Menu {
         if (nivelInput == 2) nivel = NivelAlerta.NARANJA;
         if (nivelInput == 3) nivel = NivelAlerta.ROJA;
 
-        // Pedimos el Evento (Recordá que tu Zona valida CRECIDA_RIO o TORMENTA_SEVERA)
+        // Pedimos el Evento 
         System.out.println("Tipo de Evento: 1. CRECIDA_RIO | 2. TORMENTA_SEVERA");
         System.out.print("Seleccione el evento (1-2): ");
         int eventoInput = leerEntero();
@@ -581,7 +598,7 @@ public class Menu {
         }
         
     }
-    // Método para vincular un equipo de respuesta a una alerta usando tu método de Alerta
+    // Metodo para vincular un equipo de respuesta a una alerta
     private void asignarEquipoAlerta() {
         System.out.println("\n-- ASIGNAR EQUIPO DE RESPUESTA A ALERTA --");
 
@@ -611,7 +628,7 @@ public class Menu {
         int idxAlerta = leerEntero() - 1;
         
         if (idxAlerta < 0 || idxAlerta >= todasLasAlertas.size()) {
-            System.out.println("Opcion de alerta inválida.");
+            System.out.println("Opcion de alerta invalida");
             return;
         }
         Alerta alertaSeleccionada = todasLasAlertas.get(idxAlerta);
@@ -648,7 +665,7 @@ public class Menu {
         try {
             alertaSeleccionada.asignarEquipo(equipoSeleccionado);
             alertaSeleccionada.setAtendida(true);
-            System.out.println("El equipo '" + equipoSeleccionado.getNombreEquipo() + 
+            System.out.println("El equipo " + equipoSeleccionado.getNombreEquipo() + 
                                " fue asignado correctamente a la alerta ID " + alertaSeleccionada.getIdAlerta());
         } catch (src.excepciones.AsignacionInvalidaException | src.excepciones.EquipoOcupadoException e) {
             System.out.println("ERROR OPERATIVO: " + e.getMessage());
@@ -663,45 +680,64 @@ public class Menu {
             System.out.println("1. Listar personal tecnico y equipos");
             System.out.println("2. Agregar nuevo responsable tecnico");
             System.out.println("3. Agregar nuevo equipo de respuesta");
-            System.out.println("4. Agregar responsable tecnico a un equipo de respuesta");
+            System.out.println("4. Asignar responsable tecnico a un equipo de respuesta");
+            System.out.println("5. Asignar responsable a el mantenimiento de sensores (reparacion/calibracion)");
             System.out.println("0. Volver");
             System.out.print("Seleccione una opción: ");
-
-            op = leerEntero();
-
-            if (op == 1) {
-                System.out.println("\nLISTADO DE PERSONAL:");
-                if (gestora.getResponsables().isEmpty()) {
-                    System.out.println("   No hay personal tecnico registrado");
-                } else {
-                    for (ResponsableTecnico r : gestora.getResponsables()) {
-                        System.out.println("- " + r.getNombreCompleto() + " | Licencia: " + r.getNumeroLicencia() + " | Especialidad: " + r.getEspecialidad());
-                    }
+            
+            try {
+                op = Integer.parseInt(scanner.nextLine().trim());
+                switch (op) {
+                    case 1:mostrarPersonalYEquipos();break;
+                    case 2:agregarNuevoResponsable();break;
+                    case 3:agregarNuevoEquipo();break;
+                    case 4:agregarIntegranteAEquipo(); break;
+                    case 5:asignarMantenimientoSensores();break;
+                    case 0:break;
+                    default:System.out.println("\n Opcion invalida");
                 }
-                
-                System.out.println("\nEQUIPOS DE RESPUESTA:");
-                if (gestora.getEquipos().isEmpty()) {
-                    System.out.println("   No hay equipos de respuesta registrados");
-                } else {
-                    for (EquipoRespuesta eq : gestora.getEquipos()) {
-                        String disp = eq.getDisponible() ? "LIBRE" : "OCUPADO";
-                        System.out.println("- ID " + eq.getIdEquipo() + ": " + eq.getNombreEquipo() + " [" + disp + "]");
-                    }
-                }
-            } else if (op == 2) {
-                agregarNuevoResponsable(); 
-            } else if (op == 3) {
-                agregarNuevoEquipo();     
-            } else if (op == 4) {
-                agregarIntegranteAEquipo(); 
+            } catch (NumberFormatException e) {
+                System.out.println("\n Ingresa un numero valido");
+                op = -1;
             }
         } while (op != 0);
     }
 
-    // Metodo auxiliar para crear nuevo responsable
+    // Metodo para listar personal y Equipos de respuesta
+    private void mostrarPersonalYEquipos() {
+        System.out.println("\nLISTADO DE PERSONAL TECNICO:");
+        if (gestora.getResponsables().isEmpty()) {
+            System.out.println("  No hay personal tecnico registrado");
+        } else {
+            for (ResponsableTecnico r : gestora.getResponsables()) {
+                System.out.println("-" + r.getNombreCompleto() + " | Licencia: " + r.getNumeroLicencia() + " | Especialidad: " + r.getEspecialidad());
+            }
+        }
+        
+        System.out.println("\nEQUIPOS DE RESPUESTA Y SUS INTEGRANTES:");
+        if (gestora.getEquipos().isEmpty()) {
+            System.out.println("  No hay equipos de respuesta registrados");
+        } else {
+            for (EquipoRespuesta eq : gestora.getEquipos()) {
+                String disp = eq.getDisponible() ? "LIBRE" : "OCUPADO";
+                System.out.println(" ID " + eq.getIdEquipo() + ": " + eq.getNombreEquipo() + " [" + disp + "]");
+                
+                if (eq.getResponsablesTecnicos() == null || eq.getResponsablesTecnicos().isEmpty()) {
+                    System.out.println(" Integrantes: Sin personal asignado");
+                } else {
+                    System.out.println(" Integrantes:");
+                    for (ResponsableTecnico miembro : eq.getResponsablesTecnicos()) {
+                        System.out.println("        " + miembro.getNombreCompleto() + " (Licencia: " + miembro.getNumeroLicencia() + ")");
+                    }
+                }
+            }
+        }
+    }
+
+    // Metodo  para crear nuevo responsable
     private void agregarNuevoResponsable() {
-        System.out.println("\n-- ALTA DE RESPONSABLE TÉCNICO --");
-        System.out.print("Ingrese DNI (solo números): ");
+        System.out.println("\n-- ALTA DE RESPONSABLE TECNICO --");
+        System.out.print("Ingrese DNI (solo numeros): ");
         int dni = leerEntero();
         
         System.out.print("Ingrese Nombre: ");
@@ -710,22 +746,23 @@ public class Menu {
         System.out.print("Ingrese Apellido: ");
         String apellido = scanner.nextLine();
         
-        System.out.print("Ingrese Correo Electrónico: ");
+        System.out.print("Ingrese Correo Electronico: ");
         String correo = scanner.nextLine();
         
-        System.out.print("Ingrese número de Celular: ");
+        System.out.print("Ingrese numero de Celular: ");
         String celular = scanner.nextLine();
         
         System.out.print("Ingrese Especialidad (Ej. Ing. Ambiental): ");
         String especialidad = scanner.nextLine();
         
-        System.out.print("Ingrese Número de Licencia/Matrícula: ");
+        System.out.print("Ingrese Numero de Licencia/Matricula: ");
         String licencia = scanner.nextLine();
 
         ResponsableTecnico nuevoTecnico = new ResponsableTecnico(dni, nombre, apellido, correo, celular, especialidad, licencia);
         gestora.agregarResponsable(nuevoTecnico);
-        System.out.println("¡Personal técnico " + nombre + " " + apellido + " agregado con éxito!");
+        System.out.println("Personal tecnico " + nombre + " " + apellido + " agregado con éxito");
     }
+
     // Metodo para crear Equipos de Respuesta
     private void agregarNuevoEquipo() {
         System.out.println("\n-- ALTA DE EQUIPO DE RESPUESTA --");
@@ -740,19 +777,19 @@ public class Menu {
         EquipoRespuesta nuevo = new EquipoRespuesta(id, nombre, true);
         gestora.agregarEquipo(nuevo);
         
-        System.out.println("-> ¡ÉXITO! Equipo '" + nombre + "' agregado correctamente a la flota.");
+        System.out.println("Equipo " + nombre + " agregado correctamente");
     }
     
     private void agregarIntegranteAEquipo() {
-        System.out.println("\n-- ASIGNAR RESPONSABLE TÉCNICO A EQUIPO --");
+        System.out.println("\n-- ASIGNAR RESPONSABLE TECNICO A EQUIPO --");
 
         // Validamos que existan equipos y responsables cargados
         if (gestora.getEquipos().isEmpty()) {
-            System.out.println("Error: No hay equipos de respuesta registrados en el sistema.");
+            System.out.println("Error: No hay equipos de respuesta registrados en el sistema");
             return;
         }
         if (gestora.getResponsables().isEmpty()) {
-            System.out.println("Error: No hay responsables técnicos registrados en el sistema.");
+            System.out.println("Error: No hay responsables tecnicos registrados en el sistema");
             return;
         }
 
@@ -772,16 +809,16 @@ public class Menu {
         EquipoRespuesta equipoElegido = gestora.getEquipos().get(idxEquipo);
 
         // Listamos y seleccionamos el Responsable Tecnico
-        System.out.println("\nSeleccione el Responsable Técnico que se sumará:");
+        System.out.println("\nSeleccione el Responsable Tecnico que se sumara:");
         for (int i = 0; i < gestora.getResponsables().size(); i++) {
             ResponsableTecnico rt = gestora.getResponsables().get(i);
             System.out.println((i + 1) + ". " + rt.getNombreCompleto() + " | Especialidad: " + rt.getEspecialidad() + " | Licencia: " + rt.getNumeroLicencia());
         }
-        System.out.print("Opción de responsable: ");
+        System.out.print("Opcion de responsable: ");
         int idxRt = leerEntero() - 1;
 
         if (idxRt < 0 || idxRt >= gestora.getResponsables().size()) {
-            System.out.println("Opción de responsable inválida.");
+            System.out.println("Opcion de responsable invalida");
             return;
         }
         ResponsableTecnico rtElegido = gestora.getResponsables().get(idxRt);
@@ -790,18 +827,97 @@ public class Menu {
         try {
             equipoElegido.agregarIntegrante(rtElegido); 
             
-            System.out.println("-> ¡ÉXITO! El técnico " + rtElegido.getNombreCompleto() + 
+            System.out.println(" El técnico " + rtElegido.getNombreCompleto() + 
                                " fue asignado correctamente al equipo '" + equipoElegido.getNombreEquipo() + "'.");
         } catch (Exception e) {
-            System.out.println("-> Error al vincular el integrante: " + e.getMessage());
+            System.out.println(" Error al vincular el integrante: " + e.getMessage());
         }
     }
 
-    //INFORMES Y REPORTES
+    // Metodo para arreglar y calibrar sensores
+    private void asignarMantenimientoSensores() {
+        System.out.println("\n--- MANTENIMIENTO Y CALIBRACIÓN DE SENSORES ---");
+        
+        // Buscamos y mostramos que sensores tienen problemas
+        boolean haySensoresConProblemas = false;
+        System.out.println("Sensores que requieren atencion:");
+
+        for (Sensor s : gestora.getSensores()) {
+            boolean roto = (s.getEstado() != src.enums.EstadoOperativo.OPERATIVO);
+            boolean descalibrado = s.requiereCalibracion();
+            
+            if (roto || descalibrado) {
+                System.out.println("- ID: " + s.getIdSensor() + " | Marca: " + s.getMarca() + 
+                                   " | Estado: " + s.getEstado() + 
+                                   " | Descalibrado: " + (descalibrado ? "SI" : "NO"));
+                haySensoresConProblemas = true;
+            }
+        }
+
+        if (!haySensoresConProblemas) {
+            System.out.println(" Todos los sensores del sistema estan operativos y con la calibracion al dia");
+            return;
+        }
+
+        // Elegimos el sensor a reparar
+        System.out.print("\nIngrese el ID del sensor a reparar/calibrar (o 0 para cancelar): ");
+        int idSensor = leerEntero();
+        if (idSensor == 0) return;
+
+        Sensor sensorSelec = null;
+        for (Sensor s : gestora.getSensores()) {
+            if (s.getIdSensor() == idSensor) {
+                sensorSelec = s;
+                break;
+            }
+        }
+
+        if (sensorSelec == null) {
+            System.out.println("Error: Sensor no encontrado");
+            return;
+        }
+
+        if (gestora.getResponsables().isEmpty()) {
+            System.out.println("Error: No hay personal tecnico registrado para realizar el mantenimiento");
+            return;
+        }
+
+        // Se muestra el personal tecnico disponible
+        System.out.println("\nPersonal Tecnico disponible:");
+        for (ResponsableTecnico rt : gestora.getResponsables()) {
+            System.out.println("- DNI: " + rt.getDni() + " | Nombre: " + rt.getNombreCompleto());
+        }
+
+        // Se pide el DNI del tecnico que estara a cargo
+        System.out.print("Ingrese el DNI del tecnico a cargo del arreglo: ");
+        int dniResp = leerEntero();
+        ResponsableTecnico respSelec = null;
+        for (ResponsableTecnico rt : gestora.getResponsables()) {
+            if (rt.getDni() == dniResp) {
+                respSelec = rt;
+                break;
+            }
+        }
+
+        if (respSelec == null) {
+            System.out.println("Error: Tecnico no encontrado");
+            return;
+        }
+
+        // Repara y renueva la calibracion
+        sensorSelec.setEstado(src.enums.EstadoOperativo.OPERATIVO);
+        sensorSelec.setUltimaCalibracion(java.time.LocalDate.now());
+        
+        // Mensaje para informar que se realiza con exito
+        System.out.println("\n Mantenimiento completado por " + respSelec.getNombreCompleto());
+        System.out.println(" El sensor ID " + sensorSelec.getIdSensor() + " ha vuelto a estado operativo y su fecha de calibracion es hoy");
+    }
+
+    // INFORMES Y REPORTES
     private void menuInformesYReportes() {
         int op = -1;
         do {
-            System.out.println("--- GENERAR INFORMES Y REPORTES ---");
+            System.out.println("\n--- GENERAR INFORMES Y REPORTES ---");
             System.out.println("1. Historico de precipitaciones por zona y estacion");
             System.out.println("2. Ranking de estaciones por volumetria");
             System.out.println("3. Historial de alertas emitidas (filtrado)");
@@ -811,78 +927,181 @@ public class Menu {
             System.out.println("0. Volver al menu principal");
             System.out.print("Seleccione una opción: ");
 
-            op = leerEntero();
-            System.out.println();
+            try {
+                op = Integer.parseInt(scanner.nextLine().trim());
+                System.out.println();
 
-            switch (op) {
-                case 1:
-                    gestora.reportePrecipitacionesHistoricas();
-                    break;
-                case 2:
-                    System.out.print("Ingrese fecha desde (AAAA-MM-DD): ");
-                    LocalDate desded = leerFecha();
-                    System.out.print("Ingrese fecha hasta (AAAA-MM-DD): ");
-                    LocalDate hastad = leerFecha();
-                    if (desded != null && hastad != null) {
-                        gestora.rankingEstaciones(desded, hastad);
-                    }
-                    break;
-                case 3:
-                    gestora.historialAlertas(null, null, null, null);
-                    break;
-                case 4:
-                    if (gestora.getEstaciones().isEmpty()) {
-                        System.out.println("No hay estaciones cargadas.\n");
-                    } else {
-                        System.out.print("Ingrese ID de la estación: ");
-                        int idEst = leerEntero();
-                        EstacionMeteorologica est = null;
-                        for (EstacionMeteorologica e : gestora.getEstaciones()) {
-                            if (e.getIdEstacion() == idEst) {
-                                est = e;
-                                break;
-                            }
-                        }
-                        if (est != null) {
-                            gestora.fichaTecnica(est);
-                        } else {
-                            System.out.println("Estación no encontrada.\n");
-                        }
-                    }
-                    break;
-                case 5:
-                    gestora.informeFallas();
-                    break;
-                case 6:
-                    if (gestora.getZonas().isEmpty()) {
-                        System.out.println("No hay zonas cargadas.\n");
-                    } else {
-                        System.out.print("Ingrese ID de la zona: ");
-                        int idZona = leerEntero();
-                        ZonaGeografica zona = null;
-                        for (ZonaGeografica z : gestora.getZonas()) {
-                            if (z.getIdZona() == idZona) {
-                                zona = z;
-                                break;
-                            }
-                        }
-                        if (zona != null) {
-                            System.out.print("Ingrese año (ej: 2026): ");
-                            int anio = leerEntero();
-                            System.out.print("Ingrese mes (1-12): ");
-                            int mes = leerEntero();
-                            gestora.anomaliaClimatica(zona, anio, mes);
-                        } else {
-                            System.out.println("Zona no encontrada.\n");
-                        }
-                    }
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Opción no válida.\n");
+                switch (op) {
+                    case 1:gestora.reportePrecipitacionesHistoricas();break;
+                    case 2:generarRankingEstaciones();break;
+                    case 3:generarHistorialAlertasFiltrado();;break;
+                    case 4:generarFichaTecnica();break;
+                    case 5:gestora.informeFallas();break;
+                    case 6:generarAnalisisAnomalia();break;
+                    case 0:break;
+                    default:System.out.println("Opcion no valida\n");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\n Ingresa un numero valido");
+                op = -1;
             }
         } while (op != 0);
+    }
+
+    // Metodo auxiliar para el caso 2
+    private void generarRankingEstaciones() {
+        // Se pide gecha de inicio y finalizacion para la volumetria de estaciones
+        System.out.println("-- RANKING DE ESTACIONES POR VOLUMETRIA --");
+        System.out.print("Ingrese fecha desde (AAAA-MM-DD): ");
+        LocalDate desded = leerFecha();
+        System.out.print("Ingrese fecha hasta (AAAA-MM-DD): ");
+        LocalDate hastad = leerFecha();
+        
+        if (desded != null && hastad != null) {
+            gestora.rankingEstaciones(desded, hastad);
+        }
+    }
+
+    // Metodo auxiliar para el caso 3 
+    private void generarHistorialAlertasFiltrado() {
+        System.out.println("\n-- HISTORIAL DE ALERTAS EMITIDAS (FILTRADO) --");
+        System.out.println("(Para omitir un filtro, ingrese 0 en las opciones o presione Enter en las fechas)");
+
+        // Filtro por Nivel de Severidad
+        System.out.println("\nNiveles de Alerta: 1.VERDE | 2. AMARILLA | 3. NARANJA | 4. ROJA | 0. Sin filtro");
+        System.out.print("Seleccione el nivel de severidad (0-4): ");
+        int nivelInput = leerEntero();
+        NivelAlerta nivelFiltro = null;
+        if (nivelInput == 1) nivelFiltro = NivelAlerta.VERDE;
+        if (nivelInput == 2) nivelFiltro = NivelAlerta.AMARILLA;
+        else if (nivelInput == 3) nivelFiltro = NivelAlerta.NARANJA;
+        else if (nivelInput == 4) nivelFiltro = NivelAlerta.ROJA;
+
+        // Filtro por Fechas (Lo hacemos directo con el scanner para poder detectar el Enter vacío)
+        System.out.print("\nIngrese fecha DESDE (AAAA-MM-DD) o presione Enter para omitir: ");
+        String strDesde = scanner.nextLine().trim();
+        LocalDate fechaDesde = null;
+        if (!strDesde.isEmpty()) {
+            try {
+                fechaDesde = LocalDate.parse(strDesde);
+            } catch (Exception e) {
+                System.out.println("Formato invalido. Se omitira el filtro de fecha de inicio");
+            }
+        }
+
+        System.out.print("Ingrese fecha HASTA (AAAA-MM-DD) o presione Enter para omitir: ");
+        String strHasta = scanner.nextLine().trim();
+        LocalDate fechaHasta = null;
+        if (!strHasta.isEmpty()) {
+            try {
+                fechaHasta = LocalDate.parse(strHasta);
+            } catch (Exception e) {
+                System.out.println("Formato invalido. Se omitira el filtro de fecha de fin");
+            }
+        }
+
+        // Filtro por Zona
+        ZonaGeografica zonaFiltro = null;
+        if (!gestora.getZonas().isEmpty()) {
+            System.out.println("\nZonas disponibles para filtrar:");
+            for (ZonaGeografica z : gestora.getZonas()) {
+                System.out.println("- ID " + z.getIdZona() + ": " + z.getNombre());
+            }
+            // Pedimos ID de la zona a filtrar
+            System.out.print("Ingrese ID de la zona a filtrar (o 0 para buscar en todas): ");
+            int idZona = leerEntero();
+
+            // Realizamos la busqueda de la zona y en caso de no encontrarse o seleccionar 0 se tomaran todas las zonas
+            if (idZona > 0) {
+                for (ZonaGeografica z : gestora.getZonas()) {
+                    if (z.getIdZona() == idZona) {
+                        zonaFiltro = z;
+                        break;
+                    }
+                }
+                if (zonaFiltro == null) {
+                    System.out.println(" Zona no encontrada. Se buscara en todas las zonas");
+                }
+            }
+        }
+
+        // Ejecutamos la busqueda en la gestora enviando los filtros aplicados
+        System.out.println("\nGenerando reporte con los filtros aplicados\n");
+        gestora.historialAlertas(nivelFiltro, fechaDesde, fechaHasta, zonaFiltro);
+    }
+
+    // Metodo auxiliar para el caso 4
+    private void generarFichaTecnica() {
+        System.out.println("-- FICHA TECNICA OPERATIVA DE ESTACION --");
+        if (gestora.getEstaciones().isEmpty()) {
+            System.out.println("No hay estaciones cargadas en el sistema\n");
+            return;
+        } 
+        
+        // Listamos brevemente las estaciones disponibles para ayudar al usuario
+        System.out.println("Estaciones disponibles:");
+        for (EstacionMeteorologica e : gestora.getEstaciones()) {
+            System.out.println("- ID " + e.getIdEstacion() + ": " + e.getNombre());
+        }
+
+        // Pedimos ID de la estacion que se quiere la ficha tecnica
+        System.out.print("\nIngrese ID de la estacion: ");
+        int idEst = leerEntero();
+
+        //Buscamos la estacion solicitada
+        EstacionMeteorologica est = null;
+        for (EstacionMeteorologica e : gestora.getEstaciones()) {
+            if (e.getIdEstacion() == idEst) {
+                est = e;
+                break;
+            }
+        }
+        // Realizamos la ficha tecnica si la estacion fue encontrada. Sino da error
+        if (est != null) {
+            gestora.fichaTecnica(est);
+        } else {
+            System.out.println("Error: Estacion no encontrada\n");
+        }
+    }
+
+    // Metodo auxiliar para el caso 6
+    private void generarAnalisisAnomalia() {
+        System.out.println("-- ANALISIS DE ANOMALIA CLIMATICA MENSUAL --");
+        if (gestora.getZonas().isEmpty()) {
+            System.out.println("No hay zonas cargadas en el sistema\n");
+            return;
+        } 
+
+        // Listamos brevemente las zonas disponibles
+        System.out.println("Zonas disponibles:");
+        for (ZonaGeografica z : gestora.getZonas()) {
+            System.out.println("- ID " + z.getIdZona() + ": " + z.getNombre());
+        }
+
+        // Pedimos ID de la zona a analizar
+        System.out.print("\nIngrese ID de la zona a analizar: ");
+        int idZona = leerEntero();
+
+        // Buscamos la zona solicitada
+        ZonaGeografica zona = null;
+        for (ZonaGeografica z : gestora.getZonas()) {
+            if (z.getIdZona() == idZona) {
+                zona = z;
+                break;
+            }
+        }
+
+        // Pedimos año y mes para realizar la anomalia
+        if (zona != null) {
+            System.out.print("Ingrese año (ej: 2026): ");
+            int anio = leerEntero();
+            System.out.print("Ingrese mes (1-12): ");
+            int mes = leerEntero();
+            // Realizamos la anomalia climatica si la fecha y zona coincide. Sino devuelve 0
+            gestora.anomaliaClimatica(zona, anio, mes);
+        } else {
+            System.out.println("Error: Zona no encontrada\n");
+        }
     }
 
     // Auxiliares de lectura por consola
@@ -898,7 +1117,7 @@ public class Menu {
         try {
             return LocalDate.parse(scanner.nextLine());
         } catch (Exception e) {
-            System.out.println("Fecha inválida. Debe usar el formato AAAA-MM-DD.");
+            System.out.println("Fecha invalida. Debe usar el formato AAAA-MM-DD.");
             return null;
         }
     }
