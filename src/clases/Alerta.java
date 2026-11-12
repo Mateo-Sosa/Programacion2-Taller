@@ -103,7 +103,7 @@ public class Alerta {
     }
 
     // metodo asignar equipo
-    public void asignarEquipo(EquipoRespuesta e) throws AsignacionInvalidaException, EquipoOcupadoException {
+    public void asignarEquipo(EquipoRespuesta e) throws AsignacionInvalidaException{
         // Validamos si el nivel de la alerta exige un equipo (Naranja o Roja)
         if (!this.requiereEquipo()) {
             throw new AsignacionInvalidaException("La alerta ID " + this.getIdAlerta() + " (Nivel " + this.getNivel() + ") no requiere equipo de respuesta");

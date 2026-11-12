@@ -685,7 +685,7 @@ public class Menu {
             alertaSeleccionada.setAtendida(true);
             System.out.println("El equipo " + equipoSeleccionado.getNombreEquipo() + 
                                " fue asignado correctamente a la alerta ID " + alertaSeleccionada.getIdAlerta());
-        } catch (src.excepciones.AsignacionInvalidaException | src.excepciones.EquipoOcupadoException e) {
+        } catch (src.excepciones.AsignacionInvalidaException e) {
             System.out.println("ERROR OPERATIVO: " + e.getMessage());
         }
     }
@@ -933,7 +933,7 @@ public class Menu {
         System.out.println("\n Mantenimiento completado por " + respSelec.getNombreCompleto());
         System.out.println(" El sensor ID " + sensorSelec.getIdSensor() + " ha vuelto a estado operativo y su fecha de calibracion es hoy");
     }
-    
+
     /**
      * Gestiona el submenú de Informes y Reportes, permitiendo generar rankings,
      * historicos de precipitaciones, análisis de anomalías y fichas técnicas.
