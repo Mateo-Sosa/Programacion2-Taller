@@ -8,6 +8,12 @@ import java.util.Scanner;
 
 import src.clases.*;
 import src.enums.*;
+
+/**
+ * Clase encargada de la interfaz de usuario por consola.
+ * Maneja los diferentes menús interactivos del sistema, validando entradas 
+ * mediante estructuras de control y excepciones.
+ */
 public class Menu {
 
     private Gestora gestora;
@@ -17,7 +23,10 @@ public class Menu {
         this.gestora = gestora;
         this.scanner = new Scanner(System.in);
     }
-
+    /**
+     * Inicia el ciclo principal del sistema, mostrando el menú general 
+     * y redirigiendo al submenú seleccionado por el usuario.
+     */
     public void iniciar() {
         int opcion = -1;
         do {
@@ -44,7 +53,10 @@ public class Menu {
             }
         } while (opcion != 0);
     }
-
+    /**
+     * Gestiona el submenú de Zonas Geográficas y Estaciones Meteorológicas,
+     * permitiendo listar, agregar o eliminar elementos de forma interactiva.
+     */
     //ZONAS Y ESTACIONES 
     private void menuZonasYEstaciones() {
         int op = -1;
@@ -278,7 +290,10 @@ public class Menu {
         gestora.getEstaciones().remove(estacionEncontrada);
         System.out.println(" La estación meteorológica fue eliminada correctamente del sistema");
     }
-
+    /**
+     * Gestiona el submenú de Sensores y Mediciones, permitiendo el alta de sensores,
+     * registro de lecturas y consultas de su historial.
+     */
     //  SENSORES 
     private void menuSensores() {
         int op = -1;
@@ -512,7 +527,10 @@ public class Menu {
         System.out.println(" El sensor ID " + sensorElegido.getIdSensor() + 
                            " fue retirado correctamente de la estacion " + estacionActual.getNombre());
     }
-
+    /**
+     * Gestiona el submenú de Alertas, permitiendo consultar el historial,
+     * generar alertas manuales y vincular equipos de respuesta.
+     */
     //  ALERTAS 
     private void menuAlertas() {
         int op = -1;
@@ -671,7 +689,10 @@ public class Menu {
             System.out.println("ERROR OPERATIVO: " + e.getMessage());
         }
     }
-
+    /**
+     * Gestiona el submenú de Personal Técnico y Equipos de Respuesta,
+     * permitiendo dar de alta responsables, equipos y asignar tareas de mantenimiento.
+     */
     // PERSONAL TECNICO 
     private void menuPersonalTecnico() {
         int op = -1;
@@ -912,7 +933,11 @@ public class Menu {
         System.out.println("\n Mantenimiento completado por " + respSelec.getNombreCompleto());
         System.out.println(" El sensor ID " + sensorSelec.getIdSensor() + " ha vuelto a estado operativo y su fecha de calibracion es hoy");
     }
-
+    
+    /**
+     * Gestiona el submenú de Informes y Reportes, permitiendo generar rankings,
+     * historicos de precipitaciones, análisis de anomalías y fichas técnicas.
+     */
     // INFORMES Y REPORTES
     private void menuInformesYReportes() {
         int op = -1;

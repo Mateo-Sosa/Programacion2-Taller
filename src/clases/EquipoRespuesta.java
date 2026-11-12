@@ -1,6 +1,10 @@
 package src.clases;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Representa un equipo de respuesta rápida ante emergencias climáticas.
+ * Administra su disponibilidad operativa y los responsables técnicos que lo integran.
+ */
 public class EquipoRespuesta{
     //Atributos
     private int idEquipo;

@@ -3,7 +3,11 @@ import java.time.LocalDateTime;
 
 import src.enums.*;
 import src.excepciones.*;
-
+/**
+ * Representa una alerta emitida en el sistema ante situaciones climáticas de riesgo 
+ * en una zona geográfica (como crecidas de ríos o tormentas severas).
+ * Gestiona el nivel de severidad, el estado de atención y la asignación de equipos de respuesta.
+ */
 public class Alerta {
     //atributos
     private int idAlerta;

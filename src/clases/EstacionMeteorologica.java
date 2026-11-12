@@ -7,8 +7,8 @@ import src.excepciones.*;
 import java.util.ArrayList;
 import java.time.LocalDate;
 /**
- *
- * @author Franco Molina
+ * Representa una estación meteorológica (automática o convencional) instalada en el sistema.
+ * Administra su estado operativo, responsable técnico y los sensores que tiene conectados.
  */
 public class EstacionMeteorologica {
     // Atributos

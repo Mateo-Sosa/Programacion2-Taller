@@ -10,7 +10,8 @@ import java.util.List;
 import src.enums.*;
  
 /**
- * Clase gestora del sistema: guarda las listas generales y genera los informes y reportes
+ * Clase principal de gestión y lógica de negocios del sistema meteorológico.
+ * Administra las colecciones de zonas geográficas, estaciones, sensores, alertas y personal técnico.
  */
 public class Gestora {
  
@@ -50,7 +51,7 @@ public class Gestora {
     public List<EquipoRespuesta> getEquipos() {
         return equipos;
     }
- 
+    
     //metodos para agregar
     public void agregarZona(ZonaGeografica zona) {
         this.zonas.add(zona);

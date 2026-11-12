@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import src.enums.*;
 import src.excepciones.*;
-
+/**
+ * Representa una zona geográfica monitoreada dentro del sistema.
+ * Contiene estaciones meteorológicas, evalúa riesgos climáticos y gestiona alertas asociadas.
+ */
 public class ZonaGeografica {
     //atributos
     private int idZona;

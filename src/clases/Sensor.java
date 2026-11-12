@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- *
- * @author Franco Molina
+ * Representa un sensor meteorológico encargado de registrar mediciones de precipitaciones.
+ * Controla su estado operativo, margen de error, historial de lecturas y fechas de calibración.
  */
 
 public class Sensor {
