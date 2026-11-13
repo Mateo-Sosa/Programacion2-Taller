@@ -295,15 +295,17 @@ public class Menu {
      * registro de lecturas y consultas de su historial.
      */
     //  SENSORES 
+    //  SENSORES 
     private void menuSensores() {
         int op = -1;
         do {
             System.out.println("\n--- GESTION DE SENSORES Y MEDICIONES ---");
             System.out.println("1. Listar sensores registrados");
             System.out.println("2. Agregar nuevo sensor");
-            System.out.println("3. Registrar nueva medicion manual");
-            System.out.println("4. Ver mediciones de un sensor");
-            System.out.println("5. Retirar sensor de una estacion"); 
+            System.out.println("3. Instalar sensor en una estacion");
+            System.out.println("4. Registrar nueva medicion manual");
+            System.out.println("5. Ver mediciones de un sensor");
+            System.out.println("6. Retirar sensor de una estacion"); 
             System.out.println("0. Volver");
             System.out.print("Seleccione una opcion: ");
             
@@ -312,9 +314,10 @@ public class Menu {
                 switch (op) {
                     case 1:mostrarSensores();break;
                     case 2:agregarNuevoSensor();break;
-                    case 3:registrarMedicion();break;
-                    case 4:verMedicionesSensor();break;
-                    case 5:retirarSensor();break;
+                    case 3:instalarSensor();break;
+                    case 4:registrarMedicion();break;
+                    case 5:verMedicionesSensor();break;
+                    case 6:retirarSensor();break;
                     case 0:break;
                     default:System.out.println("\n Opcion invalida");
                 }
@@ -324,6 +327,7 @@ public class Menu {
             }
         } while (op != 0);
     }
+
     // Metodo para listar todos los sensores registrados
     private void mostrarSensores() {
         System.out.println("\nSENSORES REGISTRADOS:");
@@ -336,15 +340,11 @@ public class Menu {
             }
         }
     }
-    // Metodo para crear sensores
+
+    // Metodo para crear sensores 
     private void agregarNuevoSensor() {
         System.out.println("\n-- ALTA DE NUEVO SENSOR --");
         
-        if (gestora.getEstaciones().isEmpty()) {
-            System.out.println("Error: Debe existir al menos una estación para instalar el sensor");
-            return;
-        }
-
         System.out.print("Ingrese ID del sensor: ");
         int id = leerEntero();
         
@@ -357,28 +357,69 @@ public class Menu {
         System.out.print("Ingrese Margen de Error (ej: 0.1): ");
         double margen = Double.parseDouble(scanner.nextLine());
 
-        // Listamos las estaciones para que el operador elija dónde instalarlo
+        // Creamos el sensor nuevo (estado operativo por defecto y fecha de calibracion actual)
+        Sensor nuevoSensor = new Sensor(id, marca, modelo, margen, EstadoOperativo.OPERATIVO, LocalDate.now());
+
+        // Solo lo agregamos al sistema
+        gestora.agregarSensor(nuevoSensor);
+        System.out.println(" Sensor " + marca + " " + modelo + " creado y registrado correctamente en el sistema");
+    }
+
+    // Metodo para instalar un sensor libre en una estacion
+    private void instalarSensor() {
+        System.out.println("\n-- INSTALAR SENSOR EN ESTACION --");
+        
+        if (gestora.getEstaciones().isEmpty()) {
+            System.out.println("Error: Debe existir al menos una estacion para instalar el sensor.");
+            return;
+        }
+
+        // Buscamos sensores que no tengan estacion asignada
+        List<Sensor> sensoresLibres = new ArrayList<>();
+        for (Sensor s : gestora.getSensores()) {
+            if (s.getEstacion() == null) {
+                sensoresLibres.add(s);
+            }
+        }
+
+        if (sensoresLibres.isEmpty()) {
+            System.out.println("Error: No hay sensores libres disponibles. Todos estan instalados o debe crear uno nuevo.");
+            return;
+        }
+
+        // Listamos y seleccionamos el sensor libre
+        System.out.println("Sensores disponibles (sin instalar):");
+        for (int i = 0; i < sensoresLibres.size(); i++) {
+            Sensor s = sensoresLibres.get(i);
+            System.out.println((i + 1) + ". ID " + s.getIdSensor() + " (" + s.getMarca() + " " + s.getModelo() + ")");
+        }
+        System.out.print("Seleccione el numero del sensor a instalar: ");
+        int idxSensor = leerEntero() - 1;
+
+        if (idxSensor < 0 || idxSensor >= sensoresLibres.size()) {
+            System.out.println("Opcion de sensor invalida.");
+            return;
+        }
+        Sensor sensorElegido = sensoresLibres.get(idxSensor);
+
+        // Listamos y seleccionamos la estacion destino
         System.out.println("\nSeleccione la Estacion donde se instalara:");
         for (int i = 0; i < gestora.getEstaciones().size(); i++) {
             System.out.println((i + 1) + ". " + gestora.getEstaciones().get(i).getNombre());
         }
-        System.out.print("Opción: ");
+        System.out.print("Opcion de estacion: ");
         int idxEst = leerEntero() - 1;
         
         if (idxEst < 0 || idxEst >= gestora.getEstaciones().size()) {
-            System.out.println("Opcion de estacion invalida");
+            System.out.println("Opcion de estacion invalida.");
             return;
         }
-        
         EstacionMeteorologica estacionElegida = gestora.getEstaciones().get(idxEst);
 
-        // Creamos el sensor nuevo (estado operativo por defecto y fecha de calibración actual)
-        Sensor nuevoSensor = new Sensor(id, marca, modelo, margen, EstadoOperativo.OPERATIVO, LocalDate.now());
-
+        // Intentamos instalarlo usando las validaciones de la clase EstacionMeteorologica
         try {
-            estacionElegida.instalarSensor(nuevoSensor);
-            gestora.agregarSensor(nuevoSensor);
-            System.out.println(" Sensor " + marca + " " + modelo + " instalado correctamente en la estación " + estacionElegida.getNombre());
+            estacionElegida.instalarSensor(sensorElegido);
+            System.out.println(" Sensor " + sensorElegido.getMarca() + " instalado correctamente en la estacion " + estacionElegida.getNombre());
         } catch (src.excepciones.AsignacionInvalidaException e) {
             System.out.println(" ERROR DE ASIGNACION: " + e.getMessage());
         }
@@ -434,7 +475,7 @@ public class Menu {
         } catch (NumberFormatException e) {
             System.out.println(" Formato de numero invalido\n");
         } catch (src.excepciones.LecturaInvalidaException | src.excepciones.AsignacionInvalidaException e) {
-            System.out.println("das" + e.getMessage() + "\n");
+            System.out.println( e.getMessage() + "\n");
         }
     }
 
